@@ -1,5 +1,7 @@
 import os
 import kaggle
+import tensorflow as tf
+
 
 
 def import_dataset():
@@ -15,5 +17,6 @@ def import_dataset():
 DATASET_PATH = 'C-NMC_Leukemia/'
 
 if __name__ == '__main__':
+    print('Tensorflow:', tf.__version__)
     if not os.path.isdir(DATASET_PATH):
         import_dataset()
