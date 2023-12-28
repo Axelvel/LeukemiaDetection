@@ -2,6 +2,8 @@ import os
 import kaggle
 import tensorflow as tf
 
+import preprocessing
+
 
 
 def import_dataset():
@@ -20,3 +22,7 @@ if __name__ == '__main__':
     print('Tensorflow:', tf.__version__)
     if not os.path.isdir(DATASET_PATH):
         import_dataset()
+
+    preprocessing.show_image_samples()
+
+
