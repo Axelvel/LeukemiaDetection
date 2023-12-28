@@ -23,4 +23,10 @@ if __name__ == '__main__':
     if not os.path.isdir(DATASET_PATH):
         import_dataset()
 
-    preprocessing.data_loading()
+    train_data0, train_data1, train_data2, val_data, test_data = preprocessing.data_loading()
+    preprocessing.plot_histogram(train_data0,"fold_0")
+    preprocessing.plot_histogram(train_data0,"fold_1")
+    preprocessing.plot_histogram(train_data0,"fold_2")
+    preprocessing.plot_histogram(train_data0,"val")
+    preprocessing.plot_histogram(train_data0,"test")
+    

@@ -63,3 +63,10 @@ def data_loading():
         shuffle=False) 
     
     return train_data_gen_fold_0, train_data_gen_fold_1, train_data_gen_fold_2, validation_data_gen, test_data_gen
+
+def plot_histogram(datagen, name):
+    
+    labels = datagen.labels
+    x, y = np.unique(labels, return_counts=True)
+    plt.bar(["all","hem"],y)
+    plt.savefig("./histogram/"+name+".png")
