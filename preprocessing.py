@@ -10,27 +10,27 @@ img_width = 180
 
 # Initialize the ImageDataGenerator for rescaling the image arrays
 train_datagen = ImageDataGenerator(rescale=1./255)
-val_labels = pd.read_csv('./validation_data/C-NMC_test_prelim_phase_data_labels.csv')
+val_labels = pd.read_csv('./C-NMC_Leukemia/validation_data/C-NMC_test_prelim_phase_data_labels.csv')
 val_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 # Train data generators
 train_data_gen_fold_0 = train_datagen.flow_from_directory(
-    directory='./training_data/fold_0/',
+    directory='./C-NMC_Leukemia/training_data/fold_0/',
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode='binary'
 )
 
 train_data_gen_fold_1 = train_datagen.flow_from_directory(
-    directory='./training_data/fold_1/',
+    directory='./C-NMC_Leukemia/training_data/fold_1/',
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode='binary'
 )
 
 train_data_gen_fold_2 = train_datagen.flow_from_directory(
-    directory='./training_data/fold_2/',
+    directory='./C-NMC_Leukemia/training_data/fold_2/',
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode='binary'
@@ -42,7 +42,7 @@ print(train_data_gen_fold_0.class_indices)
 # Validation data generators
 validation_data_gen = val_datagen.flow_from_dataframe(
     dataframe=val_labels,
-    directory='./validation_data/C-NMC_test_prelim_phase_data',
+    directory='./C-NMC_Leukemia/validation_data/C-NMC_test_prelim_phase_data',
     x_col='new_names',
     y_col='labels',
     target_size=(img_height, img_width),
