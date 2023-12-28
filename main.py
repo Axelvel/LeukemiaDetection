@@ -23,6 +23,4 @@ if __name__ == '__main__':
     if not os.path.isdir(DATASET_PATH):
         import_dataset()
 
-    preprocessing.show_image_samples()
-
-
+    preprocessing.data_loading()
