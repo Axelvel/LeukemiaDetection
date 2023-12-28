@@ -25,8 +25,8 @@ if __name__ == '__main__':
 
     train_data0, train_data1, train_data2, val_data, test_data = preprocessing.data_loading()
     preprocessing.plot_histogram(train_data0,"fold_0")
-    preprocessing.plot_histogram(train_data0,"fold_1")
-    preprocessing.plot_histogram(train_data0,"fold_2")
-    preprocessing.plot_histogram(train_data0,"val")
-    preprocessing.plot_histogram(train_data0,"test")
+    preprocessing.plot_histogram(train_data1,"fold_1")
+    preprocessing.plot_histogram(train_data2,"fold_2")
+    preprocessing.plot_histogram(val_data,"val")
+    preprocessing.plot_histogram(test_data,"test")
     
