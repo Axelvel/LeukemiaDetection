@@ -11,6 +11,7 @@ img_width = 180
 # Initialize the ImageDataGenerator for rescaling the image arrays
 train_datagen = ImageDataGenerator(rescale=1./255)
 val_labels = pd.read_csv('./C-NMC_Leukemia/validation_data/C-NMC_test_prelim_phase_data_labels.csv')
+val_labels['labels'] = val_labels['labels'].astype(str)
 val_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
