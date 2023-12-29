@@ -14,6 +14,8 @@ total_dataset = []
 for fold in FOLDS:
     loaded_imgs = tf.keras.utils.image_dataset_from_directory(TRAIN_PATH + fold, image_size=(450, 450))
     total_dataset.append(loaded_imgs)
+
+    #count the number of data in each file and output histogram with class balance for each folder
     plt.clf()
     plt.bar(os.listdir(TRAIN_PATH + fold), [len(os.listdir(TRAIN_PATH + fold+"/all/")),len(os.listdir(TRAIN_PATH + fold+"/hem/"))])
     plt.show()
