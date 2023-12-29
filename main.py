@@ -23,6 +23,9 @@ if __name__ == '__main__':
     print('Tensorflow:', tf.__version__)
     if not os.path.isdir(DATASET_PATH):
         import_dataset()
+    
+    for i in range(3):
+        data_augment.augment_data(f"{DATASET_PATH}training_data/fold_{i}/hem/")
 
     train_data0, train_data1, train_data2, val_data, test_data = preprocessing.data_loading()
     preprocessing.plot_histogram(train_data0,"fold_0")
