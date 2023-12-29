@@ -15,10 +15,13 @@ for fold in FOLDS:
     loaded_imgs = tf.keras.utils.image_dataset_from_directory(TRAIN_PATH + fold, image_size=(450, 450))
     total_dataset.append(loaded_imgs)
 
-    #count the number of data in each file and output histogram with class balance for each folder
+    #count the number of data in each training folder, and then create an histogram with the data balance
+    x = os.listdir(TRAIN_PATH + fold)
+    y = [len(os.listdir(TRAIN_PATH + fold+"/all/")),len(os.listdir(TRAIN_PATH + fold+"/hem/"))]
+    for i in range(len(x)):
+        x[i] = x[i]+"\n"+str(y[i])
     plt.clf()
-    plt.bar(os.listdir(TRAIN_PATH + fold), [len(os.listdir(TRAIN_PATH + fold+"/all/")),len(os.listdir(TRAIN_PATH + fold+"/hem/"))])
-    plt.show()
+    plt.bar(x, y)
     plt.savefig("./histogram/"+fold+".png")
 
 
