@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from model import LeukemiaDetector
+import data_augment
 #from sklearn.model_selection import train_test_split
 
 DATASET_PATH = 'C-NMC_Leukemia/'
@@ -12,6 +13,8 @@ FOLDS = sorted(os.listdir(TRAIN_PATH))
 total_dataset = []
 
 for fold in FOLDS:
+    data_augment.augment_data(f"{TRAIN_PATH}{fold}/hem/")
+
     loaded_imgs = tf.keras.utils.image_dataset_from_directory(TRAIN_PATH + fold, image_size=(450, 450))
     total_dataset.append(loaded_imgs)
 
