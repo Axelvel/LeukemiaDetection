@@ -1,75 +1,68 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import os
-from keras.preprocessing.image import ImageDataGenerator
+import tensorflow as tf
 
 
-def data_loading(): 
+def concat_dataloader(head, rest):
+    if not rest:
+        return head
+    current = head
+    remaining = rest[1:]
+    current = current.concatenate(rest[0])
+    return concat_dataloader(current, remaining)
 
-    # Set batch size and dimensions of the images
-    batch_size = 32
-    img_height = 180
-    img_width = 180
 
-    # Initialize the ImageDataGenerator for rescaling the image arrays
-    train_datagen = ImageDataGenerator(rescale=1./255)
-    val_labels = pd.read_csv('./C-NMC_Leukemia/validation_data/C-NMC_test_prelim_phase_data_labels.csv')
-    val_labels['labels'] = val_labels['labels'].astype(str)
-    val_datagen = ImageDataGenerator(rescale=1./255)
-    test_datagen = ImageDataGenerator(rescale=1./255)
+def data_loading(dataset_path, batch_size=32):
 
-    # Train data generators
-    # ToDo: combining or use one folder as tests since test folder has no label -> return either each or only one train_gen variable
-    train_data_gen_fold_0 = train_datagen.flow_from_directory(
-        directory='./C-NMC_Leukemia/training_data/fold_0/',
-        target_size=(img_height, img_width),
+    TRAIN_PATH = dataset_path + 'training_data/'
+    TEST_PATH = dataset_path + 'testing_data/'
+    VAl_PATH = dataset_path + 'validation_data/'
+
+    # Loading training set
+    FOLDS = sorted(os.listdir(TRAIN_PATH))
+
+    total_dataset = []
+
+    for fold in FOLDS:
+        loaded_imgs = tf.keras.utils.image_dataset_from_directory(
+            TRAIN_PATH + fold,
+            batch_size=batch_size,
+            image_size=(450, 450))
+        total_dataset.append(loaded_imgs)
+
+    train_loader = concat_dataloader(total_dataset[0], total_dataset[1:])
+
+    # Loading testing set
+    test_loader = tf.keras.utils.image_dataset_from_directory(
+        TEST_PATH,
         batch_size=batch_size,
-        class_mode='binary'
+        image_size=(450, 450),
+        label_mode=None)
+
+    # Loading validation set
+    val_labels = pd.read_csv(VAl_PATH + 'C-NMC_test_prelim_phase_data_labels.csv')
+    labels_list = val_labels['labels'].astype(int).tolist()
+    val_loader = tf.keras.utils.image_dataset_from_directory(
+        VAl_PATH,
+        batch_size=batch_size,
+        image_size=(450, 450),
+        label_mode='int',
+        labels=labels_list,
+        shuffle=False
     )
 
-    train_data_gen_fold_1 = train_datagen.flow_from_directory(
-        directory='./C-NMC_Leukemia/training_data/fold_1/',
-        target_size=(img_height, img_width),
-        batch_size=batch_size,
-        class_mode='binary'
-    )
-
-    train_data_gen_fold_2 = train_datagen.flow_from_directory(
-        directory='./C-NMC_Leukemia/training_data/fold_2/',
-        target_size=(img_height, img_width),
-        batch_size=batch_size,
-        class_mode='binary'
-    )
-
-    # Validation data generators
-    validation_data_gen = val_datagen.flow_from_dataframe(
-        dataframe=val_labels,
-        directory='./C-NMC_Leukemia/validation_data/C-NMC_test_prelim_phase_data',
-        x_col='new_names',
-        y_col='labels',
-        target_size=(img_height, img_width),
-        batch_size=batch_size,
-        class_mode='binary',
-        shuffle=True
-    )
-
-    # Test data generators
-    # ToDo: the testing data has no labels
-    test_data_gen = test_datagen.flow_from_directory(
-        directory='./C-NMC_Leukemia/testing_data/',
-        target_size=(img_height, img_width),
-        batch_size=batch_size,
-        class_mode='binary',
-        shuffle=False) 
-    
-    return train_data_gen_fold_0, train_data_gen_fold_1, train_data_gen_fold_2, validation_data_gen, test_data_gen
+    return train_loader, test_loader, val_loader
 
 
-def plot_histogram(datagen, name):
-    
+def plot_histogram(data_loader, display=False):
+    labels = []
+    for _, target in data_loader:
+        labels.extend(target.numpy().tolist())
     plt.clf()
-    labels = datagen.labels
     _, y = np.unique(labels, return_counts=True)
-    plt.bar(["all","hem"],y)
-    plt.savefig("./histogram/"+name+".png")
+    plt.bar(['all' + '\n' + str(y[0]), 'hem' + '\n' + str(y[1])], y)
+    plt.savefig('./histogram/' + 'class_distribution' + '.png')
+    if display:
+        plt.show()

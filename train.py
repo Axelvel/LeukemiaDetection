@@ -1,17 +1,15 @@
-import os
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from model import LeukemiaDetector
 import data_augment
 #from sklearn.model_selection import train_test_split
 
-DATASET_PATH = 'C-NMC_Leukemia/'
+def training(model, train_loader):
 
 TRAIN_PATH = DATASET_PATH + 'training_data/'
 FOLDS = sorted(os.listdir(TRAIN_PATH))
 
 total_dataset = []
-
 for fold in FOLDS:
     data_augment.augment_data(f"{TRAIN_PATH}{fold}/hem/")
 
