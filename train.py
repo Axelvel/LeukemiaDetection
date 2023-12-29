@@ -1,5 +1,6 @@
 import os
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from model import LeukemiaDetector
 #from sklearn.model_selection import train_test_split
 
@@ -13,6 +14,11 @@ total_dataset = []
 for fold in FOLDS:
     loaded_imgs = tf.keras.utils.image_dataset_from_directory(TRAIN_PATH + fold, image_size=(450, 450))
     total_dataset.append(loaded_imgs)
+    plt.clf()
+    plt.bar(os.listdir(TRAIN_PATH + fold), [len(os.listdir(TRAIN_PATH + fold+"/all/")),len(os.listdir(TRAIN_PATH + fold+"/hem/"))])
+    plt.show()
+    plt.savefig("./histogram/"+fold+".png")
+
 
 
 def concat_dataloader(head, rest):
