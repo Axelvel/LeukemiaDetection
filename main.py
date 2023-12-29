@@ -7,6 +7,7 @@ from train import training
 
 DATASET_PATH = './C-NMC_Leukemia/' if os.name == 'nt' else 'C-NMC_Leukemia/'
 
+
 def import_dataset():
     """
     Downloads and extracts files from the

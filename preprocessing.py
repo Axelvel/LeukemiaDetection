@@ -62,7 +62,7 @@ def plot_histogram(data_loader, display=False):
         labels.extend(target.numpy().tolist())
     plt.clf()
     _, y = np.unique(labels, return_counts=True)
-    plt.bar(["all", "hem"], y)
+    plt.bar(['all' + '\n' + str(y[0]), 'hem' + '\n' + str(y[1])], y)
     plt.savefig('./histogram/' + 'class_distribution' + '.png')
     if display:
         plt.show()
