@@ -3,12 +3,12 @@ import cv2
 import random
 
 def augment_data(path):
-    #for each image in the folder aplly either a rotation or a flip for data augmentation purpose
+    # For each image in the folder apply either a rotation or a flip
 
     if "augmented_0.bmp" not in os.listdir(path):
         for i, file in enumerate(os.listdir(path)):
-            image = cv2.imread(path+file)
-            augment = random.randint(0,5)
+            image = cv2.imread(path + file)
+            augment = random.randint(0, 5)
             match augment:
                 case 0:
                     image = cv2.flip(image, 0)
