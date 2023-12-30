@@ -7,6 +7,7 @@ from train import training
 
 DATASET_PATH = './C-NMC_Leukemia/' if os.name == 'nt' else 'C-NMC_Leukemia/'
 
+
 def import_dataset():
     """
     Downloads and extracts files from the
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     plot_histogram(train_loader)
 
     # Training loop
-    INPUT_SIZE = 450 * 450 * 3
+    INPUT_SIZE = (450, 450, 3)
     OUTPUT_SIZE = 2
     model = LeukemiaDetector(INPUT_SIZE, OUTPUT_SIZE)
     training(model, train_loader)
