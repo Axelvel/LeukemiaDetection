@@ -62,7 +62,20 @@ def plot_histogram(data_loader, display=False):
         labels.extend(target.numpy().tolist())
     plt.clf()
     _, y = np.unique(labels, return_counts=True)
-    plt.bar(["all", "hem"], y)
+    plt.bar(['all' + '\n' + str(y[0]), 'hem' + '\n' + str(y[1])], y)
     plt.savefig('./histogram/' + 'class_distribution' + '.png')
     if display:
         plt.show()
+
+
+def plot_folds(path):
+    FOLDS = sorted(os.listdir(path))
+    for fold in FOLDS:
+        # Count the number of data in each training folder, and then create an histogram with the data balance
+        x = ['all', 'hem']
+        y = [len(os.listdir(path + fold + '/' + x[0])), len(os.listdir(path + fold + '/' + x[1]))]
+        for i in range(len(x)):
+            x[i] = x[i] + '\n' + str(y[i])
+        plt.clf()
+        plt.bar(x, y)
+        plt.savefig("./histogram/" + fold + ".png")

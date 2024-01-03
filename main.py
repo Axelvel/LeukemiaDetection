@@ -4,6 +4,7 @@ import tensorflow as tf
 from preprocessing import data_loading, plot_histogram
 from model import LeukemiaDetector
 from train import training
+from data_augment import augment_data
 
 DATASET_PATH = './C-NMC_Leukemia/' if os.name == 'nt' else 'C-NMC_Leukemia/'
 
@@ -22,6 +23,10 @@ if __name__ == '__main__':
     print('Tensorflow:', tf.__version__)
     if not os.path.isdir(DATASET_PATH):
         import_dataset()
+
+    # Augmenting data
+    for i in range(3):
+        augment_data(f"{DATASET_PATH}training_data/fold_{i}/hem/")
 
     # Creating dataloaders
     train_loader, test_loader, val_loader = data_loading(dataset_path=DATASET_PATH, batch_size=16)

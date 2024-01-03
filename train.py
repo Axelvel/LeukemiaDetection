@@ -91,3 +91,4 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
     plt.show()
 
     return history
+
