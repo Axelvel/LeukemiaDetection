@@ -58,10 +58,7 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
         history['val_loss'].append(val_loss.result().numpy())
         history['val_accuracy'].append(val_accuracy.result().numpy())
 
-        # Store metrics
-        history['loss'].append(train_loss.result().numpy())
-        history['accuracy'].append(train_accuracy.result().numpy())
-        
+
         # Print the progress
         print(f"Epoch {epoch + 1}, "
               f"Loss: {train_loss.result()}, "
