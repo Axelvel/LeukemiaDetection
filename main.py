@@ -38,4 +38,4 @@ if __name__ == '__main__':
     INPUT_SIZE = (450, 450, 3)
     OUTPUT_SIZE = 2
     model = LeukemiaDetector(INPUT_SIZE, OUTPUT_SIZE)
-    training(model, train_loader)
+    training(model, train_loader, val_loader)
