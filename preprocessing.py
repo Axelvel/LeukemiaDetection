@@ -58,7 +58,7 @@ def data_loading(dataset_path, batch_size=32):
 
     # Normalizing the tensors
     train_loader = train_loader.map(lambda x, y: (tf.divide(x, 255), y))
-    test_loader = test_loader.map(lambda x, y: (tf.divide(x, 255), y))
+    test_loader = test_loader.map(lambda x: (tf.divide(x, 255)))
     val_loader = val_loader.map(lambda x, y: (tf.divide(x, 255), y))
 
     return train_loader, test_loader, val_loader
