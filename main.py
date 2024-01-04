@@ -35,7 +35,7 @@ if __name__ == '__main__':
     plot_histogram(train_loader)
 
     # Training loop
-    INPUT_SIZE = (450, 450, 3)
+    INPUT_SIZE = (450, 450)
     OUTPUT_SIZE = 2
     model = LeukemiaDetector(INPUT_SIZE, OUTPUT_SIZE)
     training(model, train_loader, val_loader)
