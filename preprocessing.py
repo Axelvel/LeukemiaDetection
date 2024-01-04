@@ -58,6 +58,11 @@ def data_loading(dataset_path, batch_size=32):
         shuffle=False
     )
 
+    # Converting to Grayscale
+    train_loader = train_loader.map(lambda x, y: (tf.image.rgb_to_grayscale(x), y))
+    test_loader = test_loader.map(lambda x, y: (tf.image.rgb_to_grayscale(x), y))
+    val_loader = val_loader.map(lambda x, y: (tf.image.rgb_to_grayscale(x), y))
+
     # Normalizing the tensors
     train_loader = train_loader.map(lambda x, y: (tf.divide(x, 255), y))
     test_loader = test_loader.map(lambda x, y: (tf.divide(x, 255), y))
