@@ -17,12 +17,15 @@ def concat_dataloader(head, rest):
 def data_loading(dataset_path, batch_size=32):
 
     TRAIN_PATH = dataset_path + 'training_data/'
-    TEST_PATH = dataset_path + 'testing_data/'
     VAl_PATH = dataset_path + 'validation_data/'
 
     # Loading training set
     FOLDS = sorted(os.listdir(TRAIN_PATH))
     FOLDS = [fold for fold in FOLDS if not fold.startswith('.')]
+
+    # We are using the first 2 folds for training and the last one for testing
+    testing_fold = FOLDS.pop(-1)
+    TEST_PATH = TRAIN_PATH + testing_fold
 
     total_dataset = []
 
@@ -41,8 +44,7 @@ def data_loading(dataset_path, batch_size=32):
     test_loader = tf.keras.utils.image_dataset_from_directory(
         TEST_PATH,
         batch_size=batch_size,
-        image_size=(450, 450),
-        label_mode=None)
+        image_size=(450, 450))
 
     # Loading validation set
     val_labels = pd.read_csv(VAl_PATH + 'C-NMC_test_prelim_phase_data_labels.csv')
@@ -58,7 +60,7 @@ def data_loading(dataset_path, batch_size=32):
 
     # Normalizing the tensors
     train_loader = train_loader.map(lambda x, y: (tf.divide(x, 255), y))
-    test_loader = test_loader.map(lambda x: (tf.divide(x, 255)))
+    test_loader = test_loader.map(lambda x, y: (tf.divide(x, 255), y))
     val_loader = val_loader.map(lambda x, y: (tf.divide(x, 255), y))
 
     return train_loader, test_loader, val_loader
