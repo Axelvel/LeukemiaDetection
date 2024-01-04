@@ -22,6 +22,7 @@ def data_loading(dataset_path, batch_size=32):
 
     # Loading training set
     FOLDS = sorted(os.listdir(TRAIN_PATH))
+    FOLDS = [fold for fold in FOLDS if not fold.startswith('.')]
 
     total_dataset = []
 
@@ -29,7 +30,9 @@ def data_loading(dataset_path, batch_size=32):
         loaded_imgs = tf.keras.utils.image_dataset_from_directory(
             TRAIN_PATH + fold,
             batch_size=batch_size,
-            image_size=(450, 450))
+            image_size=(450, 450),
+            color_mode="rgb")
+
         total_dataset.append(loaded_imgs)
 
     train_loader = concat_dataloader(total_dataset[0], total_dataset[1:])
@@ -52,6 +55,11 @@ def data_loading(dataset_path, batch_size=32):
         labels=labels_list,
         shuffle=False
     )
+
+    # Normalizing the tensors
+    train_loader = train_loader.map(lambda x, y: (tf.divide(x, 255), y))
+    test_loader = test_loader.map(lambda x, y: (tf.divide(x, 255), y))
+    val_loader = val_loader.map(lambda x, y: (tf.divide(x, 255), y))
 
     return train_loader, test_loader, val_loader
 
