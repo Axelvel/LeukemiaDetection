@@ -1,6 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+
 # Training Loop
 def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10):
     # Loss function
@@ -26,7 +27,8 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
         val_loss.reset_states()
         val_accuracy.reset_states()
 
-        for inputs, labels in train_loader:
+        for batch_num, (inputs, labels) in enumerate(train_loader):
+            print(f"{batch_num}/{len(train_loader)}")
             with tf.GradientTape() as tape:
                 # Forward pass
                 predictions = model(inputs, training=True)
@@ -58,14 +60,13 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
         history['val_loss'].append(val_loss.result().numpy())
         history['val_accuracy'].append(val_accuracy.result().numpy())
 
-
         # Print the progress
         print(f"Epoch {epoch + 1}, "
               f"Loss: {train_loss.result()}, "
               f"Accuracy: {train_accuracy.result() * 100}, "
               f"Validation Loss: {val_loss.result()}, "
               f"Validation Accuracy: {val_accuracy.result() * 100}")
-        
+
     # Plotting
     plt.figure(figsize=(12, 8))
 
@@ -91,4 +92,3 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
     plt.show()
 
     return history
-
