@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
 
 class LeukemiaDetector(tf.keras.Model):
@@ -20,11 +20,16 @@ class LeukemiaDetector(tf.keras.Model):
         self.dense = Dense(128, activation='relu')
         self.output_layer = Dense(output_size, activation='softmax')
 
+        #Regularization layer
+        self.dropout = Dropout(0.5)
+
     def call(self, inputs, training=None, mask=None):
         x = self.conv1(inputs)
         x = self.maxpool1(x)
+        x = self.dropout(x)
         x = self.conv2(x)
         x = self.maxpool2(x)
         x = self.flatten(x)
+        x = self.dropout(x)
         x = self.dense(x)
         return self.output_layer(x)
