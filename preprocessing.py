@@ -25,6 +25,7 @@ def data_loading(dataset_path, batch_size=32):
 
     # We are using the first 2 folds for training and the last one for testing
     testing_fold = FOLDS.pop(-1)
+    testing_fold = FOLDS.pop(-1)
     TEST_PATH = TRAIN_PATH + testing_fold
 
     total_dataset = []
