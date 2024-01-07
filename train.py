@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 # Training Loop
-def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10):
+def training(model, a_loader, b_loader, c_loader, a_val_loader, b_val_loader, c_val_loader, learning_rate=0.001, num_epochs=10):
     # Loss function
     loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
 
@@ -21,6 +21,16 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
 
     print("Training starting...")
     for epoch in range(num_epochs):
+        if epoch % 3 == 0:
+            train_loader = a_loader
+            val_loader = a_val_loader
+        elif epoch %3 == 1:
+            train_loader = b_loader
+            val_loader = b_val_loader
+        else:
+            train_loader = c_loader
+            val_loader = c_val_loader
+
         # Reset the metrics at the start of each epoch
         train_loss.reset_states()
         train_accuracy.reset_states()
