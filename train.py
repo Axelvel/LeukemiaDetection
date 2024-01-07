@@ -20,6 +20,7 @@ def training(model, a_loader, b_loader, c_loader, a_val_loader, b_val_loader, c_
     history = {'train_loss': [], 'train_accuracy': [], 'val_loss': [], 'val_accuracy': []}
 
     print("Training starting...")
+    prev_acc = 0.0
     for epoch in range(num_epochs):
         if epoch % 3 == 0:
             train_loader = a_loader
@@ -76,6 +77,9 @@ def training(model, a_loader, b_loader, c_loader, a_val_loader, b_val_loader, c_
               f"Accuracy: {train_accuracy.result() * 100}, "
               f"Validation Loss: {val_loss.result()}, "
               f"Validation Accuracy: {val_accuracy.result() * 100}")
+        if abs(train_accuracy.result()*100-prev_acc*100)<3:
+            break
+        prev_acc = train_accuracy.result()
 
     # Plotting
     plt.figure(figsize=(12, 8))
