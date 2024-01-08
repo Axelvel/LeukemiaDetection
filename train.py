@@ -1,8 +1,9 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+
 # Training Loop
-def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10):
+def training(model, a_loader, b_loader, c_loader, a_val_loader, b_val_loader, c_val_loader, learning_rate=0.001, num_epochs=10):
     # Loss function
     loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
 
@@ -19,14 +20,26 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
     history = {'train_loss': [], 'train_accuracy': [], 'val_loss': [], 'val_accuracy': []}
 
     print("Training starting...")
+    prev_acc = 0.0
     for epoch in range(num_epochs):
+        if epoch % 3 == 0:
+            train_loader = a_loader
+            val_loader = a_val_loader
+        elif epoch %3 == 1:
+            train_loader = b_loader
+            val_loader = b_val_loader
+        else:
+            train_loader = c_loader
+            val_loader = c_val_loader
+
         # Reset the metrics at the start of each epoch
         train_loss.reset_states()
         train_accuracy.reset_states()
         val_loss.reset_states()
         val_accuracy.reset_states()
 
-        for inputs, labels in train_loader:
+        for batch_num, (inputs, labels) in enumerate(train_loader):
+            print(f"{batch_num}/{len(train_loader)}")
             with tf.GradientTape() as tape:
                 # Forward pass
                 predictions = model(inputs, training=True)
@@ -58,14 +71,16 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
         history['val_loss'].append(val_loss.result().numpy())
         history['val_accuracy'].append(val_accuracy.result().numpy())
 
-
         # Print the progress
         print(f"Epoch {epoch + 1}, "
               f"Loss: {train_loss.result()}, "
               f"Accuracy: {train_accuracy.result() * 100}, "
               f"Validation Loss: {val_loss.result()}, "
               f"Validation Accuracy: {val_accuracy.result() * 100}")
-        
+        if abs(train_accuracy.result()*100-prev_acc*100)<3:
+            break
+        prev_acc = train_accuracy.result()
+
     # Plotting
     plt.figure(figsize=(12, 8))
 
@@ -91,4 +106,3 @@ def training(model, train_loader, val_loader, learning_rate=0.001, num_epochs=10
     plt.show()
 
     return history
-

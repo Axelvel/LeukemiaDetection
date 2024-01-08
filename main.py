@@ -29,13 +29,13 @@ if __name__ == '__main__':
         augment_data(f"{DATASET_PATH}training_data/fold_{i}/hem/")
 
     # Creating dataloaders
-    train_loader, test_loader, val_loader = data_loading(dataset_path=DATASET_PATH, batch_size=16)
+    a_loader, b_loader, c_loader, a_val_loader, b_val_loader, c_val_loader, test_loader = data_loading(dataset_path=DATASET_PATH, batch_size=16)
 
     # Plotting class distribution
-    plot_histogram(train_loader)
+    #plot_histogram(train_loader)
 
     # Training loop
-    INPUT_SIZE = (450, 450, 3)
+    INPUT_SIZE = (450, 450)
     OUTPUT_SIZE = 2
     model = LeukemiaDetector(INPUT_SIZE, OUTPUT_SIZE)
-    training(model, train_loader, val_loader)
+    training(model, a_loader, b_loader, c_loader, a_val_loader, b_val_loader, c_val_loader)
